@@ -5,12 +5,7 @@ import { strictFormat } from '../utils/text.js';
 export class NanoGPT {
     static prefix = 'nanogpt';
     constructor(model_name, url, params) {
-        // get the model name without the "nanogpt:" prefix
-        // e.g "nanogpt:mistral-llama3-70b" -> "mistral-llama3-70b"
-        console.log("NanoGPT model_name:", model_name);
-        // if (typeof model_name.split(":")[1] !== "undefined") {
-        //     this.model_name = model_name.split(":")[1];
-        // }
+        this.model_name = model_name;
         this.params = params;
         let config = {};
 
@@ -26,7 +21,7 @@ export class NanoGPT {
         messages = strictFormat(messages);
 
         const pack = {
-            model: this.model_name || 'EVA-UNIT-01/EVA-LLaMA-3.33-70B-v0.0',
+            model: this.model_name,
             messages,
             stop: stop_seq,
             ...(this.params || {})
@@ -63,7 +58,7 @@ export class NanoGPT {
         for (let retries = 0; retries < maxRetries; retries++) {
             try {
                 const { data } = await this.openai.embeddings.create({
-                    model: this.model_name || "text-embedding-v3",
+                    model: this.model_name,
                     input: text,
                     encoding_format: "float",
                 });
